@@ -13,7 +13,16 @@ Include liveliness probes to ensure the tcp socket is operational and a readynes
 
 ### Service
 Quick and clean.  This will target the Deployment, targeting the `containerPort` that we defined in the `Deployment` as `nginx` and assign this Service a port of `8080` so we can access it.
+Since we are running Kubernetes locally, we are using `serviceType: NodePort` to poke holes in our local kubernetes deployment.  This will allow us to access the service in our browser using `localhost`
 
 ### Kustomize
 Apply the whole configuration with kustomize to keep things easy:
 `kubectl apply -k .`
+Keep in mind this will *also* create a namespace `nginx`
+
+### Test
+Go to: http://localhost:30000
+
+![Terminal](./images/get_all.png)
+
+![Screeenshot](./images/index.png)

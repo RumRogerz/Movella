@@ -45,15 +45,4 @@ spec:
         ports:
           - containerPort:  80
             name:  nginx
-      #   volumeMounts:
-      #     - mountPath: /etc/nginx/nginx.conf
-      #       name: nginx-config
-      #       subPath: nginx.conf
-      # volumes:
-      #   - name: nginx-config
-      #     configMap:
-      #       name: nginx-config
-      #       items:
-      #         - key: nginx.conf
-      #           path: nginx.conf
       restartPolicy: Always

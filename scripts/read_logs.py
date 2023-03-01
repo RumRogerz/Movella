@@ -12,10 +12,10 @@ class KubernetesDefaults():
             self.namespace = os.environ['NAMESPACE']
         except config.config_exception.ConfigException:
             # Default to loading from your personal kube config file with a specified context
-            config.load_kube_config(context=self.context)
             self.interval = 300
             self.namespace = 'nginx'
             self.context = 'docker-desktop'  # N.B! Your context might be different!!!
+            config.load_kube_config(context=self.context)
     def apiClient(self):
         self.client = client.CoreV1Api()
 
@@ -39,7 +39,7 @@ def readLogs(k8s, pod_name):
     return filtered_lines
 
 def logIt(error):
-    pattern = r'(?P<dateTime>\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2})\s+\[(?P<severity>\w+)\]\s+(?P<pid>\d{1,2})#(?P<tid>\d{1,2}):.+\*(?P<connid>\d{1,4})\s(?P<message>.+),\sclient:\s(?P<client>.+),\sserver:\s(?P<server>.+),\srequest:\s(?P<request>.+),\shost:\s(?P<host>.+),\sreferrer:\s(?P<referrer>.+)'
+    pattern = r'(?P<dateTime>\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2})\s+\[(?P<severity>\w+)\]\s+(?P<pid>\d{1,2})#(?P<tid>\d{1,2}):.+\*(?P<connid>.+?)\s(?P<message>.+),\sclient:\s(?P<client>.+),\sserver:\s(?P<server>.+),\srequest:\s(?P<request>.+),\shost:\s(?P<host>.+),\sreferrer:\s(?P<referrer>.+)'
     # Match pattern with incomming error log
     match = re.match(pattern, error)
     if match:
@@ -57,7 +57,7 @@ def logIt(error):
             "referrer": regex['referrer'].strip('"'),
             "message": regex['message'].strip('"')
         }
-        return json.dumps(error_dict)
+        print(json.dumps(error_dict))
     else:
         return None
 

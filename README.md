@@ -56,7 +56,7 @@ This is a pretty simple script.  It will:
         * All errors are a list of lines from all running pods.  To make things more human readable, lets chop these error lines up using regular expressions and put them together in a more digestible format: (JSON)
         * I may have gone a bit overboard here. Some digging on the internet has shown me consistent behaviour in how error logs are written from nginx, so the following regex should work in a fairly homogenous manner.  I would have most likely gone with Grok over regex, however I did not want to add any additional packages needed to run this script.
         The following pattern includes named groups which makes for object handling in python simpler:
-            `(?P<dateTime>\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2})\s+\[(?P<severity>\w+)\]\s+(?P<pid>\d{1,2})#(?P<tid>\d{1,2}):.+\*(?P<connid>\d{1,4})\s(?P<message>.+),\sclient:\s(?P<client>.+),\sserver:\s(?P<server>.+),\srequest:\s(?P<request>.+),\shost:\s(?P<host>.+),\sreferrer:\s(?P<referrer>.+)`
+            `(?P<dateTime>\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2})\s+\[(?P<severity>\w+)\]\s+(?P<pid>\d{1,2})#(?P<tid>\d{1,2}):.+\*(?P<connid>.+?)\s(?P<message>.+),\sclient:\s(?P<client>.+),\sserver:\s(?P<server>.+),\srequest:\s(?P<request>.+),\shost:\s(?P<host>.+),\sreferrer:\s(?P<referrer>.+)`
         * Once a match is established, build out a dictionary and print it out as json.
         * If pretty printed, it becomes *much* easier to read:
             ```

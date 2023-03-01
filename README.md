@@ -40,6 +40,11 @@ This is a pretty simple script.  It will:
 1.
     * Load a custom kubernetes object with all pertinent information needed to access the kubernetes api
     * Load a kubernetes configuration
+        * This can either be run as a pod within the cluster or manually on your terminal. This script will check for you.  Defaults are already set for manual use, however if it is running in a pod, it will load information from the environment variables:
+            - `INTERVAL` 
+            - `NAMESPACE`
+
+        which should make it more portable and customizable. All that would need to be done is a simple deployment with the script loaded in as a configmap backed by a python container.
     * Load the kubernetes API client in the custom kubrenetes object
 2. Run a `while` loop which runs every 300 seconds
     * grab a list of all running pods in the namespace `nginx`

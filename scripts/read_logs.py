@@ -1,14 +1,21 @@
 from kubernetes import client, config
-import re, time, json
+import re, time, json, os
 
 class KubernetesDefaults():
     def __init__(self):
-        self.interval = 300
-        self.namespace = 'nginx'
-        self.container_name = 'nginx'   
-        self.context = 'docker-desktop'   # N.B! Your context might be different!!!
+        self.container_name = 'nginx'    
     def loadConfig(self):
-        config.load_kube_config(context=self.context)
+        try:
+            # Attempt to load in_cluster if running in a pod
+            config.load_incluster_config()
+            self.interval = os.environ['INTERVAL']
+            self.namespace = os.environ['NAMESPACE']
+        except config.config_exception.ConfigException:
+            # Default to loading from your personal kube config file with a specified context
+            config.load_kube_config(context=self.context)
+            self.interval = 300
+            self.namespace = 'nginx'
+            self.context = 'docker-desktop'  # N.B! Your context might be different!!!
     def apiClient(self):
         self.client = client.CoreV1Api()
 

@@ -23,10 +23,9 @@ Apply the whole configuration with kustomize to keep things easy:
 Keep in mind this will *also* create a namespace `nginx`
 
 ### Test
-Go to: http://localhost:30000
-
 ![Terminal](./images/get_all.png)
 
+Go to: http://localhost:30000
 ![Screeenshot](./images/index.png)
 
 # Script
@@ -59,7 +58,7 @@ This is a pretty simple script.  It will:
             '2023/03/01 00:44:24 [error] 31#31: *8 open() "/usr/share/nginx/html/images/note.gif" failed (2: No such file or directory), client: 192.168.65.3, server: localhost, request: "GET /images/note.gif HTTP/1.1", host: "localhost:30000", referrer: "http://localhost:30000/parameter-substitution.html"'
 
             becomes:
-            
+
             {
             "dateTime": "2023/03/01 00:44:24",
             "severity": "error",

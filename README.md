@@ -40,7 +40,7 @@ This is a pretty simple script.  It will:
 1.
     * Load a custom kubernetes object with all pertinent information needed to access the kubernetes api
     * Load a kubernetes configuration
-        * This can either be run as a pod within the cluster or manually on your terminal. This script will check for you.  Defaults are already set for manual use, however if it is running in a pod, it will load information from the environment variables:
+        * This can either be run as a pod within the cluster or manually on your terminal. This script will check for you.  Defaults are already set for manual use, however if it is running in a pod, it will load information from the environment variables (which can be defined in a Deployment):
             - `INTERVAL` 
             - `NAMESPACE`
 

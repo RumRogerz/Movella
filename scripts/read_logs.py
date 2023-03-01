@@ -1,5 +1,5 @@
 from kubernetes import client, config
-import re, time
+import re, time, json
 
 class KubernetesDefaults():
     def __init__(self):
@@ -31,21 +31,28 @@ def readLogs(k8s, pod_name):
             filtered_lines.append(line)
     return filtered_lines
 
-def logIt(errors):
-    for error in errors:
-        # Build out the error in parts, then assemble them in an easy to read dict
-        parts = error.split()
-        date = parts[0]
-        time = parts[1]
-        severity = parts[2].strip("[]")
-        error_message = " ".join(parts[3:])
-        log_dict = {
-            "date": date,
-            "time": time,
-            "info": severity,
-            "message": error_message
+def logIt(error):
+    pattern = r'(?P<dateTime>\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2})\s+\[(?P<severity>\w+)\]\s+(?P<pid>\d{1,2})#(?P<tid>\d{1,2}):.+\*(?P<connid>\d{1,4})\s(?P<message>.+),\sclient:\s(?P<client>.+),\sserver:\s(?P<server>.+),\srequest:\s(?P<request>.+),\shost:\s(?P<host>.+),\sreferrer:\s(?P<referrer>.+)'
+    # Match pattern with incomming error log
+    match = re.match(pattern, error)
+    if match:
+        regex = match.groupdict()
+        error_dict = {
+            "dateTime": regex['dateTime'],
+            "severity": regex['severity'],
+            "processID": regex['pid'],
+            "threadID": regex['tid'],
+            "connectionID": regex['connid'],
+            "client": regex['client'],
+            "server": regex['server'],
+            "request": regex['request'].strip('"'),
+            "host": regex['host'].strip('"'),
+            "referrer": regex['referrer'].strip('"'),
+            "message": regex['message'].strip('"')
         }
-        print(log_dict)
+        return json.dumps(error_dict)
+    else:
+        return None
 
 def main():
     # load kubernetes information
@@ -67,7 +74,8 @@ def main():
                 errors.extend(pod_logs)
 
         if errors:
-            logIt(errors)
+            for error in errors:
+                logIt(error)
         
         # Wait 300 seconds (5 mins)
         time.sleep(k8s.interval)

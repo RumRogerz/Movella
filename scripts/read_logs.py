@@ -39,7 +39,7 @@ def readLogs(k8s, pod_name):
     return filtered_lines
 
 def logIt(error):
-    pattern = r'(?P<dateTime>\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2})\s+\[(?P<severity>\w+)\]\s+(?P<pid>\d{1,2})#(?P<tid>\d{1,2}):.+\*(?P<connid>.+?)\s(?P<message>.+),\sclient:\s(?P<client>.+),\sserver:\s(?P<server>.+),\srequest:\s(?P<request>.+),\shost:\s(?P<host>.+),\sreferrer:\s(?P<referrer>.+)'
+    pattern = r'(?P<dateTime>\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2})\s+\[(?P<severity>\w+)\]\s+(?P<pid>\d{1,2})#(?P<tid>\d{1,2}):.+\*(?P<connid>\d+)\s(?P<message>.+),\sclient:\s(?P<client>.+),\sserver:\s(?P<server>.+),\srequest:\s(?P<request>.+),\shost:\s(?P<host>.+),\sreferrer:\s(?P<referrer>.+)'
     # Match pattern with incomming error log
     match = re.match(pattern, error)
     if match:
